@@ -1,0 +1,6 @@
+description: "Agentic URL Shortener v2.17.4"
+providers: [{id: agent, config: {command: "echo y | python -m agent.orchestrator {{prompt}}"}}]
+tests:
+    - {description: "1. Greenfield", vars: {prompt: "Build a scalable URL shortener with APIs, persistence, analytics"}, assert: [{type: file-exists, value: "app/db.py"}]}
+    - {description: "2. Ambiguous", vars: {prompt: "Add analytics"}, assert: [{type: contains, value: "ambiguity_detected"}]}
+    - {description: "3. Brownfield", vars: {prompt: "Add JWT auth to URL shortener"}, assert: [{type: file-exists, value: "app/auth.py"}]}
