@@ -1,7 +1,7 @@
 import sqlite3, json
 from datetime import datetime
 class Memory:
-    def __init__(self): # FIX: was _init_
+    def __init__(self):
         self.conn = sqlite3.connect("agent_memory.db")
         self.conn.execute("CREATE TABLE IF NOT EXISTS tasks(id INTEGER PRIMARY KEY, task_id TEXT, parent_id TEXT, timestamp TEXT, tool TEXT, status TEXT, attempt INT, details TEXT)")
         self.conn.execute("CREATE TABLE IF NOT EXISTS retries(id INTEGER PRIMARY KEY, task_id TEXT, attempt INT, error TEXT, timestamp TEXT)")
