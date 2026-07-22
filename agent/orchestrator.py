@@ -8,7 +8,7 @@ from agent.llm import llm
 import sys, json
 
 class Orchestrator:
-    def __init__(self): # FIX: was _init_
+    def __init__(self):
         self.planner = Planner(); self.executor = Executor(); self.reviewer = Reviewer(); self.memory = Memory(); self.guardrails = Guardrails()
         self.retry_cap = 2
 
@@ -20,7 +20,6 @@ class Orchestrator:
         for i, task in enumerate(plan["tasks"]):
             task_id = f"t{i}"
 
-            # AUTO-CONVERT: Turn string into real file_write
             if isinstance(task, str):
                 if "db.py" in task or "database" in task.lower():
                     task = {"tool": "file_write", "args": {"path": "app/db.py", "content": llm.get_db_code()}}
@@ -53,6 +52,6 @@ class Orchestrator:
         print("\n[REPLAY]"); replay(session_id)
         return self.memory.get_summary()
 
-if __name__ == "__main__": # FIX: was _name_
+if __name__ == "__main__": 
     prompt = " ".join(sys.argv[1:]) if len(sys.argv) > 1 else "Build a scalable URL shortener"
     o = Orchestrator(); summary = o.run(prompt); print("\n[ORCHESTRATOR] Done:", summary); print("Run: uvicorn app.main:app --reload")
