@@ -1,0 +1,29 @@
+{
+  "plan": {
+    "tasks": [
+      {
+        "tool": "file_write",
+        "args": {
+          "path": "app/db.py",
+          "content": "import sqlite3\n\nclass Database:\n    def __init__(self, db_name):\n        self.conn = sqlite3.connect(db_name)\n        self.cursor = self.conn.cursor()\n        self.create_table()\n\n    def create_table(self):\n        self.cursor.execute(\"\"\"\n            CREATE TABLE IF NOT EXISTS urls\n            (id INTEGER PRIMARY KEY, original_url TEXT, short_code TEXT UNIQUE, clicks INTEGER DEFAULT 0)\n        \"\"\")\n        self.conn.commit()\n\n    def get_url(self, short_code):\n        self.cursor.execute(\"SELECT original_url, clicks FROM urls WHERE short_code = ?\", (short_code,))\n        return self.cursor.fetchone()\n\n    def get_analytics(self, short_code):\n        self.cursor.execute(\"SELECT clicks FROM urls WHERE short_code = ?\", (short_code,))\n        return self.cursor.fetchone()\n\n    def update_clicks(self, short_code):\n        self.cursor.execute(\"UPDATE urls SET clicks = clicks + 1 WHERE short_code = ?\", (short_code,))\n        self.conn.commit()\n\n    def insert_url(self, original_url, short_code):\n        self.cursor.execute(\"INSERT INTO urls (original_url, short_code) VALUES (?, ?)\", (original_url, short_code))\n        self.conn.commit()"
+        }
+      },
+      {
+        "tool": "file_write",
+        "args": {
+          "path": "app/main.py",
+          "content": "from fastapi import FastAPI, HTTPException, RedirectResponse\nfrom fastapi.responses import JSONResponse\nimport sqlite3\nfrom app.db import Database\nimport string\nimport secrets\n\napp = FastAPI()\n\ndb = Database('urls.db')\n\n@app.post(\"/shorten\")\ndef shorten_url(original_url: str):\n    short_code = ''.join(secrets.choice(string.ascii_letters + string.digits) for _ in range(6))\n    while db.cursor.execute(\"SELECT * FROM urls WHERE short_code = ?\", (short_code,)).fetchone() is not None:\n        short_code = ''.join(secrets.choice(string.ascii_letters + string.digits) for _ in range(6))\n    db.insert_url(original_url, short_code)\n    return {'short_code': short_code}\n\n@app.get(\"/{short_code}\")\ndef redirect_url(short_code: str):\n    url = db.get_url(short_code)\n    if url is None:\n        raise HTTPException(status_code=404, detail=\"URL not found\")\n    db.update_clicks(short_code)\n    return RedirectResponse(url=url[0])\n\n@app.get(\"/analytics/{short_code}\")\ndef get_analytics(short_code: str):\n    analytics = db.get_analytics(short_code)\n    if analytics is None:\n        raise HTTPException(status_code=404, detail=\"URL not found\")\n    return {'clicks': analytics[0]}"
+        }
+      }
+    ],
+    "risks": [],
+    "mitigations": [],
+    "needs_clarification": false
+  },
+  "artifacts_generated": [
+    "app/db.py",
+    "app/main.py"
+  ],
+  "risks": [],
+  "mitigations": []
+}
