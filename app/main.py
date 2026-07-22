@@ -9,7 +9,7 @@ app = FastAPI()
 DB_NAME = "urls.db"
 
 def get_db():
-    conn = sqlite3.connect(DB_NAME, check_same_thread=False) # FIX: thread safe
+    conn = sqlite3.connect(DB_NAME, check_same_thread=False)
     conn.row_factory = sqlite3.Row
     return conn
 
@@ -21,7 +21,7 @@ def init_db():
     conn.commit()
     conn.close()
 
-init_db() # run once on startup
+init_db()
 
 def generate_short_code():
     return ''.join(secrets.choice(string.ascii_letters + string.digits) for _ in range(6))
