@@ -10,14 +10,11 @@ An agentic system that build and test a FastAPI URL shortener.
 - **Auto Testing**: Runs `pytest` and reports success/failure
 - **Endpoints**: `POST /shorten`, `GET /{short_code}`, `GET /analytics/{short_code}`
 
-## Setup
+## Setup & Run
 
-#Install dependencies
+#Install dependencies & Run
 ```bash
 pip install -r requirements.txt
-
-#Run
-```bash
 python eval.py
 pytest -v
 uvicorn app.main:app --reload
