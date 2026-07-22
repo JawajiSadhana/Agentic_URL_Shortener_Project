@@ -7,7 +7,6 @@ class Guardrails:
     ALLOWLIST = ["app/", "tests/", "scenarios/"]
     
     def check(self, task):
-        # FIX: If task is string, parse it
         if isinstance(task, str):
             try:
                 task = json.loads(task)
