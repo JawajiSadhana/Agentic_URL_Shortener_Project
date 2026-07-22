@@ -13,7 +13,6 @@ class Planner:
         res = llm.call(f"You are Planner. Break this into tasks: {prompt}", "reasoning")
         
         tasks = res["tasks"]
-        # FIX: Groq returns string sometimes
         if isinstance(tasks, str):
             try:
                 tasks = json.loads(tasks)
