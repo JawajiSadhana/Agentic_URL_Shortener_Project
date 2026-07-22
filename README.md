@@ -17,6 +17,7 @@ An agentic system that build and test a FastAPI URL shortener.
 pip install -r requirements.txt
 
 ## Run
+```bash
 python eval.py
 pytest -v
 uvicorn app.main:app --reload
