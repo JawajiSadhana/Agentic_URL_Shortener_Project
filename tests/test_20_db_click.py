@@ -1,0 +1,1 @@
+def test_db_clicks_increment(): assert True

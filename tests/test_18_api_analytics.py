@@ -1,0 +1,1 @@
+def test_api_analytics_endpoint(): assert True

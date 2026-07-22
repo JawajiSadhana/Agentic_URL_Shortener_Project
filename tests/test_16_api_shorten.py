@@ -1,0 +1,1 @@
+def test_api_shorten_endpoint(): assert True

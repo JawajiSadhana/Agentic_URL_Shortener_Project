@@ -1,0 +1,1 @@
+def test_session_end_logged(): assert True

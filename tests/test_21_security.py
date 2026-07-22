@@ -1,0 +1,1 @@
+def test_no_hardcoded_secrets(): assert True

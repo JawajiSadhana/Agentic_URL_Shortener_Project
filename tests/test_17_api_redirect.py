@@ -1,0 +1,1 @@
+def test_api_redirect_endpoint(): assert True

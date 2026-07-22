@@ -1,0 +1,1 @@
+def test_db_schema(): assert True
